@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { breakpoints } from '../styles/breakpoints';
 
 const colors = {
   primary: '#2E2E2E',
@@ -365,45 +366,16 @@ const Title = styled.h1`
 `;
 
 const TimelineWrapper = styled.div`
-  max-width: 1200px;
-  margin: -1rem auto 0;
   padding: 2rem;
-  position: relative;
-  height: 85vh;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  z-index: 1;
-  margin-top: 1rem;
-
-  /* Custom scrollbar styling */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(79, 70, 229, 0.3) transparent;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(79, 70, 229, 0.3);
-    border-radius: 3px;
-    
-    &:hover {
-      background-color: rgba(79, 70, 229, 0.5);
-    }
+  
+  @media (max-width: ${breakpoints.tablet}) {
+    padding: 1rem;
   }
 
   &::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, #4F46E5, #0EA5E9, transparent);
+    @media (max-width: ${breakpoints.mobile}) {
+      left: 20px;
+    }
   }
 `;
 
@@ -434,6 +406,11 @@ const TimelineItem = styled.div`
   &:hover {
     opacity: 1;
     transform: scale(1.02);
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    flex-direction: column;
+    margin: 3rem 0;
   }
 `;
 

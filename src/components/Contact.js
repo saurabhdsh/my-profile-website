@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { breakpoints } from '../styles/breakpoints';
 
 const colors = {
   primary: '#2E2E2E',
@@ -177,8 +178,12 @@ const ContactContainer = styled.div`
   justify-content: center;
   padding: 2rem 4rem;
   
-  @media (max-width: 968px) {
-    padding: 2rem;
+  @media (max-width: ${breakpoints.tablet}) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: 1rem;
   }
 `;
 
@@ -195,9 +200,12 @@ const InfoCardContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  margin-bottom: 2rem;
   
-  @media (max-width: 768px) {
+  @media (max-width: ${breakpoints.tablet}) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
     grid-template-columns: 1fr;
   }
 `;

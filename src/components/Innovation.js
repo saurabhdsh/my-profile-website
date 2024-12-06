@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { breakpoints } from '../styles/breakpoints';
 
 const colors = {
   primary: '#2E2E2E',
@@ -154,6 +155,11 @@ const InnovationGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    padding: 1rem;
+    grid-template-columns: 1fr;
+  }
 `;
 
 const CategoryCard = styled.div`
@@ -164,6 +170,10 @@ const CategoryCard = styled.div`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   animation: ${fadeInUp} 0.6s ease-out forwards;
   animation-delay: ${props => props.index * 0.2}s;
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: 1rem;
+  }
 `;
 
 const CategoryTitle = styled.h3`

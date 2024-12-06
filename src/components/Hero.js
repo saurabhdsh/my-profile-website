@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { breakpoints } from '../styles/breakpoints';
 
 // First, define all animations/keyframes
 const slideUp = keyframes`
@@ -66,10 +67,14 @@ const ContentWrapper = styled.div`
   position: relative;
   padding: 3rem;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${breakpoints.laptop}) {
     flex-direction: column;
-    text-align: center;
+    gap: 3rem;
     padding: 2rem;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    padding: 1rem;
   }
 `;
 
@@ -184,6 +189,14 @@ const Name = styled.h1`
   opacity: 0;
   animation: ${fadeIn} 0.8s ease-out forwards;
   animation-delay: 0.3s;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    font-size: 3.5rem;
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: 2.8rem;
+  }
 `;
 
 const Title = styled.div`
@@ -274,12 +287,10 @@ const Stats = styled.div`
   display: flex;
   align-items: center;
   gap: 4rem;
-  margin-top: 2rem;
-  padding: 1rem 2rem;
   
-  @media (max-width: 968px) {
-    justify-content: center;
-    gap: 3rem;
+  @media (max-width: ${breakpoints.tablet}) {
+    flex-direction: column;
+    gap: 2rem;
   }
 `;
 

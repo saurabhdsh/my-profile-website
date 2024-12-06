@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, Suspense, useCallback } from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import { breakpoints } from '../styles/breakpoints';
 
 // Colors
 const colors = {
@@ -205,8 +206,13 @@ const HighlightItem = styled.div`
 const TimelineContainer = styled.div`
   padding: 2rem 4rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    padding: 1rem;
+    grid-template-columns: 1fr;
+  }
 `;
 
 const CompanyCard = styled.div`

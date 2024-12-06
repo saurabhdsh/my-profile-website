@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { breakpoints } from './styles/breakpoints';
 
 const Navbar = () => (
   <Nav>
@@ -23,6 +24,12 @@ const Nav = styled.nav`
   background-color: #F3F4F6;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
+  position: relative;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    flex-direction: column;
+    padding: 1rem;
+  }
 `;
 
 const Logo = styled.div`
@@ -41,6 +48,14 @@ const Menu = styled.ul`
   list-style: none;
   display: flex;
   gap: 2rem;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+  }
 `;
 
 const MenuItem = styled.li`
@@ -51,6 +66,13 @@ const MenuItem = styled.li`
     transition: all 0.3s ease;
     padding: 0.5rem 1rem;
     border-radius: 6px;
+    
+    @media (max-width: ${breakpoints.tablet}) {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.8rem;
+    }
     
     &:hover {
       color: rgb(16, 185, 129);
