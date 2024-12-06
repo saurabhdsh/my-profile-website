@@ -364,7 +364,10 @@ const Hero = () => (
           in delivering scalable, innovative solutions for global enterprises.
         </Description>
         <CTAButtons>
-          <SecondaryButton href="/resume.pdf" download="Saurabh_Dubey_Resume.pdf">
+          <SecondaryButton 
+            href="https://saurabhdsh.github.io/my-profile-website/resume.pdf"
+            download="Saurabh_Dubey_Resume.pdf"
+          >
             <ButtonIcon>📄</ButtonIcon>
             Download Resume
           </SecondaryButton>
