@@ -1,0 +1,12 @@
+.contact {
+    text-align: center;
+    margin: 50px;
+    padding: 20px;
+    background: #e0f7fa;
+    border-radius: 10px;
+  }
+  .contact a {
+    color: #004d40;
+    text-decoration: none;
+  }
+  

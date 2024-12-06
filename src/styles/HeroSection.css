@@ -1,0 +1,19 @@
+.hero-section {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(to bottom right, #e0f7fa, #80deea);
+    color: #00796b;
+  }
+  
+  .hero-section h1 span {
+    color: #004d40;
+  }
+  
+  .resume-btn a {
+    text-decoration: none;
+    color: white;
+    background: #004d40;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
