@@ -137,6 +137,10 @@ const BadgeType = styled.div`
 
 const TextContent = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 `;
 
 const Greeting = styled.h2`
@@ -224,18 +228,16 @@ const Description = styled.p`
   font-size: 1.1rem;
   color: #4B5563;
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem;
   max-width: 600px;
+  text-align: center;
 `;
 
 const CTAButtons = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
-  
-  @media (max-width: 968px) {
-    justify-content: center;
-  }
+  width: 100%;
+  margin: 2rem 0 0;
 `;
 
 const ButtonBase = styled.a`
@@ -252,10 +254,11 @@ const ButtonBase = styled.a`
 const SecondaryButton = styled(ButtonBase)`
   background: rgba(0, 0, 0, 0.05);
   color: ${colors.text};
-  padding: 1rem 2rem;
+  padding: 1rem 3rem;
   border-radius: 100px;
   font-size: 1.1rem;
   letter-spacing: -0.01em;
+  margin: 0 auto;
   
   &:hover {
     background: rgba(0, 0, 0, 0.08);
@@ -271,8 +274,8 @@ const Stats = styled.div`
   display: flex;
   align-items: center;
   gap: 4rem;
-  margin-top: 4rem;
-  padding: 2rem;
+  margin-top: 2rem;
+  padding: 1rem 2rem;
   
   @media (max-width: 968px) {
     justify-content: center;
@@ -368,7 +371,6 @@ const Hero = () => (
             href="https://saurabhdsh.github.io/my-profile-website/resume.pdf"
             download="Saurabh_Dubey_Resume.pdf"
           >
-            <ButtonIcon>📄</ButtonIcon>
             Download Resume
           </SecondaryButton>
         </CTAButtons>

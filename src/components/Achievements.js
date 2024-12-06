@@ -1,6 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
+const colors = {
+  primary: '#2E2E2E',
+  secondary: '#86868B',
+  accent: '#06C',
+  text: '#1D1D1F',
+  light: '#FBFBFD',  // This is used in the Title background
+  muted: '#86868B'
+};
+
 const ParticleAnimation = () => {
   const canvasRef = useRef(null);
 
@@ -12,7 +21,7 @@ const ParticleAnimation = () => {
     let mousePosition = { x: null, y: null };
     let time = 0;
 
-    const colors = [
+    const particleColors = [
       { r: 0, g: 180, b: 216 },     // Bright Cyan
       { r: 101, g: 31, b: 255 },    // Electric Purple
       { r: 0, g: 134, b: 255 },     // Bright Blue
@@ -32,75 +41,28 @@ const ParticleAnimation = () => {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 1.5 + 0.5; // Smaller particles for sharper look
-        this.baseX = this.x;
-        this.baseY = this.y;
-        this.density = (Math.random() * 20) + 1;
-        this.angle = Math.random() * 360;
-        this.velocity = 0.01 + Math.random() * 0.02; // Slower movement for more precision
+        this.size = Math.random() * 1.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
       }
 
       update() {
-        // Orbital motion
-        this.angle += this.velocity;
-        
-        // Wave motion
-        const dx = mousePosition.x - this.x;
-        const dy = mousePosition.y - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const forceDirectionX = dx / distance;
-        const forceDirectionY = dy / distance;
-        
-        const maxDistance = 100;
-        const force = (maxDistance - distance) / maxDistance;
-        
-        if (distance < maxDistance && mousePosition.x != null) {
-          this.x += forceDirectionX * force * this.density;
-          this.y += forceDirectionY * force * this.density;
-        } else {
-          if (this.x !== this.baseX) {
-            const dx = this.x - this.baseX;
-            this.x -= dx/20;
-          }
-          if (this.y !== this.baseY) {
-            const dy = this.y - this.baseY;
-            this.y -= dy/20;
-          }
-        }
+        this.x += this.speedX;
+        this.y += this.speedY;
 
-        // Add smooth orbital motion
-        this.x += Math.cos(this.angle) * 0.5;
-        this.y += Math.sin(this.angle) * 0.5;
+        if (this.x < 0 || this.x > canvas.width) {
+          this.speedX = -this.speedX;
+        }
+        if (this.y < 0 || this.y > canvas.height) {
+          this.speedY = -this.speedY;
+        }
       }
 
       draw() {
-        const gradient = ctx.createRadialGradient(
-          this.x, this.y, 0,
-          this.x, this.y, this.size * 2
-        );
-
-        const position = (this.x / canvas.width) * (colors.length - 1);
-        const colorIndex = Math.floor(position);
-        const nextColorIndex = Math.min(colorIndex + 1, colors.length - 1);
-        const mix = position - colorIndex;
-
-        const currentColor = colors[Math.max(0, Math.min(colorIndex, colors.length - 1))];
-        const nextColor = colors[Math.max(0, Math.min(nextColorIndex, colors.length - 1))];
-
-        const color = {
-          r: Math.floor(currentColor.r * (1 - mix) + nextColor.r * mix),
-          g: Math.floor(currentColor.g * (1 - mix) + nextColor.g * mix),
-          b: Math.floor(currentColor.b * (1 - mix) + nextColor.b * mix)
-        };
-
-        // Sharper gradient with higher opacity
-        gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 1)`);
-        gradient.addColorStop(0.6, `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`);
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 1)`;
         ctx.fill();
       }
     }
@@ -113,7 +75,7 @@ const ParticleAnimation = () => {
     };
 
     const connectParticles = () => {
-      ctx.lineWidth = 0.5; // Thinner lines for sharper appearance
+      ctx.lineWidth = 0.5;
 
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -121,29 +83,16 @@ const ParticleAnimation = () => {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 100) { // Shorter connection distance
-            const opacity = (100 - distance) / 100 * 0.8; // Higher opacity
+          if (distance < 100) {
+            const opacity = (100 - distance) / 100 * 0.8;
 
             const gradient = ctx.createLinearGradient(
               particles[i].x, particles[i].y,
               particles[j].x, particles[j].y
             );
 
-            // Brighter, more vibrant colors for connections
-            const color1 = {
-              r: Math.floor(colors[0].r + Math.sin(time * 0.001 + i) * 15),
-              g: Math.floor(colors[0].g + Math.sin(time * 0.002 + i) * 15),
-              b: Math.floor(colors[0].b + Math.sin(time * 0.003 + i) * 15)
-            };
-
-            const color2 = {
-              r: Math.floor(colors[1].r + Math.sin(time * 0.001 + j) * 15),
-              g: Math.floor(colors[1].g + Math.sin(time * 0.002 + j) * 15),
-              b: Math.floor(colors[1].b + Math.sin(time * 0.003 + j) * 15)
-            };
-
-            gradient.addColorStop(0, `rgba(${color1.r}, ${color1.g}, ${color1.b}, ${opacity})`);
-            gradient.addColorStop(1, `rgba(${color2.r}, ${color2.g}, ${color2.b}, ${opacity})`);
+            gradient.addColorStop(0, `rgba(${particles[i].color.r}, ${particles[i].color.g}, ${particles[i].color.b}, ${opacity})`);
+            gradient.addColorStop(1, `rgba(${particles[j].color.r}, ${particles[j].color.g}, ${particles[j].color.b}, ${opacity})`);
 
             ctx.beginPath();
             ctx.strokeStyle = gradient;
@@ -343,6 +292,17 @@ const Achievements = () => {
   );
 };
 
+const slideInLeft = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
 const expandLine = keyframes`
   from {
     transform: scaleX(0);
@@ -364,21 +324,32 @@ const shine = keyframes`
 `;
 
 const Title = styled.h1`
-  font-size: 3.5rem;
-  font-weight: 800;
+  font-size: 3rem;
+  font-weight: 700;
+  color: ${colors.text};
   text-align: left;
   margin: 0;
   padding: 2rem 4rem;
-  background: linear-gradient(90deg, #4F46E5, #7C3AED, #2563EB, #0EA5E9);
-  background-size: 200% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: ${shine} 5s linear infinite;
+  letter-spacing: -0.02em;
   position: sticky;
   top: 0;
   z-index: 2;
   backdrop-filter: blur(10px);
+  transform-origin: left center;
+  animation: ${slideInLeft} 0.8s ease-out;
+  width: 100%;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+    opacity: 0.95;
+    z-index: -1;
+  }
   
   &::after {
     content: '';
@@ -401,6 +372,8 @@ const TimelineWrapper = styled.div`
   height: 85vh;
   overflow-y: auto;
   scroll-behavior: smooth;
+  z-index: 1;
+  margin-top: 1rem;
 
   /* Custom scrollbar styling */
   scrollbar-width: thin;
@@ -557,26 +530,7 @@ const AchievementsSection = styled.section`
   background: linear-gradient(to bottom, #ffffff, #f8f9fa);
   overflow: hidden;
   min-height: 100vh;
-
-  h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    color: #004d40;
-    margin-bottom: 3rem;
-    position: relative;
-    animation: ${fadeIn} 1s ease-out;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 3px;
-      background: #004d40;
-    }
-  }
+  z-index: 1;
 `;
 
 const AchievementGrid = styled.div`
