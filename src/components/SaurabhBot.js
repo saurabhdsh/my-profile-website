@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import avatarImage from '../assets/avatar.jpeg';
 
 const colors = {
   primary: '#3B82F6',     // Main blue
@@ -132,7 +133,16 @@ const SaurabhBot = () => {
 
       <ChatWindow isOpen={isOpen}>
         <ChatHeader>
-          <BotAvatar>SD</BotAvatar>
+          <BotAvatar>
+            <AvatarImage 
+              src={avatarImage}
+              alt="Saurabh Bot"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://via.placeholder.com/40";
+              }}
+            />
+          </BotAvatar>
           <div>
             <BotName>Saurabh Bot</BotName>
             <BotStatus>Running on caffeine and cloud services ☕</BotStatus>
@@ -142,7 +152,18 @@ const SaurabhBot = () => {
         <MessagesContainer>
           {messages.map((message, index) => (
             <Message key={index} isBot={message.type === 'bot'}>
-              {message.type === 'bot' && <BotIcon>SD</BotIcon>}
+              {message.type === 'bot' && (
+                <BotIcon>
+                  <img 
+                    src={avatarImage}
+                    alt="Saurabh Bot"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://via.placeholder.com/30";
+                    }}
+                  />
+                </BotIcon>
+              )}
               <MessageBubble isBot={message.type === 'bot'}>
                 {message.text}
               </MessageBubble>
@@ -150,7 +171,16 @@ const SaurabhBot = () => {
           ))}
           {isTyping && (
             <Message isBot>
-              <BotIcon>SD</BotIcon>
+              <BotIcon>
+                <img 
+                  src={avatarImage}
+                  alt="Saurabh Bot"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://via.placeholder.com/30";
+                  }}
+                />
+              </BotIcon>
               <TypingIndicator>
                 <TypingDot delay={0} />
                 <TypingDot delay={0.2} />
@@ -252,13 +282,19 @@ const ChatHeader = styled.div`
 const BotAvatar = styled.div`
   width: 40px;
   height: 40px;
-  background: white;
   border-radius: 20px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${colors.primary};
-  font-weight: bold;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+`;
+
+const AvatarImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const BotName = styled.div`
@@ -291,14 +327,19 @@ const Message = styled.div`
 const BotIcon = styled.div`
   width: 30px;
   height: 30px;
-  background: ${colors.primary};
   border-radius: 15px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: bold;
+  border: 1px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const MessageBubble = styled.div`
