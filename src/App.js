@@ -8,6 +8,7 @@ import Experience from './components/Experience.js';
 import Achievements from './components/Achievements.js';
 import Innovation from './components/Innovation';
 import Education from './components/Education';
+import SaurabhBot from './components/SaurabhBot';
 
 function App() {
   const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
@@ -66,6 +67,7 @@ function App() {
         <Route path="/education" element={<Education />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <SaurabhBot />
     </Router>
   );
 }
