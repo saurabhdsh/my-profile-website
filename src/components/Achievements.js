@@ -157,36 +157,8 @@ const Achievements = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
   const timelineRef = useRef(null);
-  const scrollRef = useRef(null);
 
-  useEffect(() => {
-    const timeline = timelineRef.current;
-    
-    // Auto-scrolling function
-    const autoScroll = () => {
-      if (!isHovering && timeline) {
-        scrollRef.current = requestAnimationFrame(() => {
-          timeline.scrollTop += 1; // Adjust speed by changing this value
-          
-          // Reset scroll to top when reached bottom
-          if (timeline.scrollTop >= timeline.scrollHeight - timeline.clientHeight) {
-            timeline.scrollTop = 0;
-          }
-          
-          autoScroll();
-        });
-      }
-    };
-
-    autoScroll();
-
-    return () => {
-      if (scrollRef.current) {
-        cancelAnimationFrame(scrollRef.current);
-      }
-    };
-  }, [isHovering]);
-
+  // Define achievements array before using it in useEffect
   const achievements = [
     {
       year: '2024',
@@ -260,6 +232,35 @@ const Achievements = () => {
     }
   ];
 
+  useEffect(() => {
+    const timeline = timelineRef.current;
+    let scrollInterval;
+
+    const scroll = () => {
+      if (!isHovering && timeline) {
+        timeline.scrollTop += 1; // Increased scroll speed
+        
+        if (timeline.scrollTop >= timeline.scrollHeight - timeline.clientHeight) {
+          timeline.scrollTop = 0;
+        }
+
+        const itemHeight = timeline.scrollHeight / achievements.length;
+        const currentIndex = Math.floor(timeline.scrollTop / itemHeight);
+        if (currentIndex !== activeIndex && currentIndex < achievements.length) {
+          setActiveIndex(currentIndex);
+        }
+      }
+    };
+
+    scrollInterval = setInterval(scroll, 50); // Adjust interval for smoother scrolling
+
+    return () => {
+      if (scrollInterval) {
+        clearInterval(scrollInterval);
+      }
+    };
+  }, [isHovering, activeIndex, achievements.length]);
+
   return (
     <AchievementsSection>
       <ParticleAnimation />
@@ -324,6 +325,17 @@ const shine = keyframes`
   100% { background-position: -200% center; }
 `;
 
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const Title = styled.h1`
   font-size: 3rem;
   font-weight: 700;
@@ -366,62 +378,37 @@ const Title = styled.h1`
 `;
 
 const TimelineWrapper = styled.div`
-  padding: 2rem;
-  
-  @media (max-width: ${breakpoints.tablet}) {
-    padding: 1rem;
-  }
-
-  &::before {
-    @media (max-width: ${breakpoints.mobile}) {
-      left: 20px;
-    }
-  }
+  padding: 2rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  overflow-y: auto;
 `;
 
 const TimelineItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 2rem 0;
-  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   position: relative;
-  opacity: ${props => props.isActive ? 1 : 0.7};
-  transform: scale(${props => props.isActive ? 1.02 : 1});
   transition: all 0.3s ease;
-
-  &:nth-child(odd) {
-    flex-direction: row-reverse;
-    
-    ${props => props.isActive && `
-      transform: translateX(-20px) scale(1.02);
-    `}
-  }
-
-  &:nth-child(even) {
-    ${props => props.isActive && `
-      transform: translateX(20px) scale(1.02);
-    `}
-  }
+  animation: ${fadeInUp} 0.6s ease-out forwards;
+  animation-delay: ${props => props.index * 0.2}s;
 
   &:hover {
-    opacity: 1;
-    transform: scale(1.02);
-  }
-
-  @media (max-width: ${breakpoints.tablet}) {
-    flex-direction: column;
-    margin: 3rem 0;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   }
 `;
 
 const YearBadge = styled.div`
   position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: -15px;
+  right: 20px;
   background: linear-gradient(135deg, #4F46E5, #0EA5E9);
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.5rem;
   border-radius: 20px;
   font-weight: bold;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -446,16 +433,7 @@ const IconBubble = styled.div`
 `;
 
 const ContentCard = styled.div`
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  max-width: 500px;
-  transform: translateY(${props => props.isActive ? '0' : '20px'});
-  opacity: ${props => props.isActive ? 1 : 0.8};
-  transition: all 0.3s ease;
+  margin-top: 1.5rem;
 
   h3 {
     color: #1F2937;
@@ -468,11 +446,6 @@ const ContentCard = styled.div`
     color: #4B5563;
     line-height: 1.6;
     font-size: 1rem;
-  }
-
-  &:hover {
-    transform: translateY(0);
-    opacity: 1;
   }
 `;
 

@@ -7,6 +7,7 @@ import Contact from './components/Contact';
 import Experience from './components/Experience.js';
 import Achievements from './components/Achievements.js';
 import Innovation from './components/Innovation';
+import Education from './components/Education';
 
 function App() {
   const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
@@ -62,6 +63,7 @@ function App() {
         <Route path="/achievements" element={<Achievements />} />
         <Route path="/innovation" element={<Innovation />} />
         <Route path="/experience" element={<Experience />} />
+        <Route path="/education" element={<Education />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>

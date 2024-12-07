@@ -11,6 +11,7 @@ const Navbar = () => (
       <MenuItem><Link to="/achievements">Achievements</Link></MenuItem>
       <MenuItem><Link to="/innovation">Innovation</Link></MenuItem>
       <MenuItem><Link to="/experience">Experience</Link></MenuItem>
+      <MenuItem><Link to="/education">Education</Link></MenuItem>
       <MenuItem><Link to="/contact">Contact</Link></MenuItem>
     </Menu>
   </Nav>

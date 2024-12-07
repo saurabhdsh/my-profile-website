@@ -241,7 +241,7 @@ const Description = styled.p`
   font-size: 1.1rem;
   color: #4B5563;
   line-height: 1.6;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1rem;
   max-width: 600px;
   text-align: center;
 `;
@@ -250,7 +250,7 @@ const CTAButtons = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  margin: 2rem 0 0;
+  margin: 1rem 0 1.5rem;
 `;
 
 const ButtonBase = styled.a`
@@ -287,6 +287,7 @@ const Stats = styled.div`
   display: flex;
   align-items: center;
   gap: 4rem;
+  margin-top: 0.5rem;
   
   @media (max-width: ${breakpoints.tablet}) {
     flex-direction: column;
@@ -332,6 +333,43 @@ const StatDivider = styled.div`
   width: 1px;
   height: 40px;
   background: rgba(79, 70, 229, 0.2);
+`;
+
+const Education = styled.div`
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+`;
+
+const EducationCard = styled.div`
+  background: rgba(255, 255, 255, 0.7);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const Degree = styled.h3`
+  font-size: 1.3rem;
+  color: ${colors.text};
+  margin-bottom: 0.5rem;
+`;
+
+const Institution = styled.p`
+  color: ${colors.secondary};
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+`;
+
+const Year = styled.span`
+  color: ${colors.accent};
+  font-size: 0.9rem;
 `;
 
 const Hero = () => (
@@ -401,6 +439,13 @@ const Hero = () => (
             <StatLabel>Client Satisfaction</StatLabel>
           </StatItem>
         </Stats>
+        <Education>
+          <EducationCard>
+            <Degree>Bachelor of Technology - Electronics</Degree>
+            <Institution>Dr Ram Manohar Lohiya Awadh University</Institution>
+            <Year>1999 - 2003</Year>
+          </EducationCard>
+        </Education>
       </TextContent>
     </ContentWrapper>
   </HeroSection>

@@ -16,9 +16,9 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .cursor-dot {
-    width: 8px;
-    height: 8px;
-    background: rgba(0, 77, 64, 0.7);
+    width: 12px;
+    height: 12px;
+    background: rgba(134, 134, 139, 0.7);
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
@@ -27,15 +27,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   .cursor-circle {
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    border: 2px solid rgba(0, 77, 64, 0.4);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
+    display: none;
   }
 
   /* Prevent cursor from changing on any interactive elements */
@@ -44,25 +36,6 @@ const GlobalStyles = createGlobalStyle`
     &:active {
       cursor: none !important;
     }
-  }
-
-  /* Hover effects */
-  a:hover ~ .cursor-circle,
-  button:hover ~ .cursor-circle {
-    width: 60px;
-    height: 60px;
-    border-color: rgba(0, 77, 64, 0.6);
-  }
-
-  /* Active state */
-  a:active ~ .cursor-dot,
-  button:active ~ .cursor-dot {
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-
-  a:active ~ .cursor-circle,
-  button:active ~ .cursor-circle {
-    transform: translate(-50%, -50%) scale(1.2);
   }
 
   code {
