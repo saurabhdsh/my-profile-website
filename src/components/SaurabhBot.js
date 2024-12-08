@@ -2,11 +2,52 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import avatarImage from '../assets/avatar.jpeg';
 
+// First, define all animations
+const float = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+`;
+
+const slideIn = keyframes`
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+`;
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const bounce = keyframes`
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+`;
+
+const fadeInScale = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+const pulseGlow = keyframes`
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+`;
+
+// Then define colors
 const colors = {
-  primary: '#3B82F6',     // Main blue
-  lightBlue: '#EFF6FF',   // Very light blue for backgrounds
-  darkBlue: '#2563EB',    // Darker blue for hover states
-  textBlue: '#1E40AF'     // Dark blue for text
+  primary: '#000000',      // Apple black
+  secondary: '#86868b',    // Apple gray
+  accent: '#0071e3',      // Apple blue
+  text: '#1d1d1f',        // Apple dark gray
+  light: '#fbfbfd',       // Apple off-white
+  border: '#d2d2d7'       // Apple border gray
 };
 
 const botResponses = {
@@ -72,10 +113,20 @@ const botResponses = {
   "interests": "Besides tech? I'm interested in anything that scales well and has good documentation! 📚"
 };
 
+// Add media query breakpoints
+const deviceBreakpoints = {
+  mobile: '480px',
+  tablet: '768px',
+  ipad: '1024px'
+};
+
 const SaurabhBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { type: 'bot', text: "Hi! I'm Saurabh's virtual assistant. How can I help you?" }
+    { 
+      type: 'bot', 
+      text: "👋 Hi! I'm Saurabh Dubey's virtual assistant. I can help you with information about notice period, location, skills, experience, and more! Feel free to ask anything." 
+    }
   ]);
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef(null);
@@ -136,7 +187,7 @@ const SaurabhBot = () => {
           <BotAvatar>
             <AvatarImage 
               src={avatarImage}
-              alt="Saurabh Bot"
+              alt="Saurabh Dubey (VA)"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "https://via.placeholder.com/40";
@@ -144,7 +195,7 @@ const SaurabhBot = () => {
             />
           </BotAvatar>
           <div>
-            <BotName>Saurabh Bot</BotName>
+            <BotName>Saurabh Dubey (VA)</BotName>
             <BotStatus>Running on caffeine and cloud services ☕</BotStatus>
           </div>
         </ChatHeader>
@@ -207,76 +258,93 @@ const SaurabhBot = () => {
   );
 };
 
-// Animations
-const float = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-`;
-
-const slideIn = keyframes`
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-`;
-
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
-const bounce = keyframes`
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-`;
-
 // Styled Components
 const ChatbotButton = styled.button`
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  background: ${colors.primary};
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: ${colors.accent};
   border: none;
   color: white;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   z-index: 1000;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  animation: ${bounce} 2s infinite;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (max-width: ${deviceBreakpoints.mobile}) {
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
 
   &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+    transform: scale(1.05);
+    background: #0077ED;
   }
 `;
 
 const ChatWindow = styled.div`
   position: fixed;
   bottom: 100px;
-  right: 20px;
-  width: 350px;
+  right: 30px;
+  width: 380px;
   height: 500px;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   z-index: 999;
-  transform: ${props => props.isOpen ? 'translateX(0)' : 'translateX(100%)'};
-  transition: transform 0.3s ease-in-out;
-  animation: ${props => props.isOpen ? slideIn : 'none'} 0.3s ease-in-out;
+  backdrop-filter: blur(20px);
+  transform-origin: bottom right;
+  transform: ${props => props.isOpen ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.95)'};
+  opacity: ${props => props.isOpen ? 1 : 0};
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid ${colors.border};
+  pointer-events: ${props => props.isOpen ? 'all' : 'none'};
+
+  // Mobile devices
+  @media (max-width: ${deviceBreakpoints.mobile}) {
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+    transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(100%)'};
+  }
+
+  // Tablets
+  @media (min-width: ${deviceBreakpoints.mobile}) and (max-width: ${deviceBreakpoints.tablet}) {
+    width: 90%;
+    right: 5%;
+    height: 600px;
+    bottom: 80px;
+  }
+
+  // iPads
+  @media (min-width: ${deviceBreakpoints.tablet}) and (max-width: ${deviceBreakpoints.ipad}) {
+    width: 400px;
+    height: 600px;
+    bottom: 90px;
+  }
 `;
 
 const ChatHeader = styled.div`
   padding: 20px;
-  background: ${colors.primary};
-  color: white;
+  background: rgba(255, 255, 255, 0.8);
+  color: ${colors.text};
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  border-bottom: 1px solid ${colors.border};
+  backdrop-filter: blur(10px);
 `;
 
 const BotAvatar = styled.div`
@@ -298,13 +366,16 @@ const AvatarImage = styled.img`
 `;
 
 const BotName = styled.div`
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: ${colors.text};
+  letter-spacing: -0.02em;
 `;
 
 const BotStatus = styled.div`
   font-size: 0.8rem;
-  opacity: 0.8;
+  color: ${colors.secondary};
+  letter-spacing: -0.01em;
 `;
 
 const MessagesContainer = styled.div`
@@ -325,65 +396,99 @@ const Message = styled.div`
 `;
 
 const BotIcon = styled.div`
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 50%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid white;
+  border: 1px solid ${colors.border};
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: white;
   
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
   }
 `;
 
 const MessageBubble = styled.div`
-  background: ${props => props.isBot ? colors.primary : colors.lightBlue};
-  color: ${props => props.isBot ? 'white' : colors.textBlue};
+  background: ${props => props.isBot ? 
+    'rgba(240, 240, 240, 0.95)' : 
+    `${colors.accent}`};
+  color: ${props => props.isBot ? colors.text : 'white'};
   padding: 12px 16px;
   border-radius: 18px;
-  max-width: 70%;
+  max-width: 85%;
   word-wrap: break-word;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+
+  @media (max-width: ${deviceBreakpoints.mobile}) {
+    max-width: 90%;
+    font-size: 0.9rem;
+    padding: 10px 14px;
+  }
 `;
 
 const InputContainer = styled.div`
-  padding: 20px;
+  padding: 20px 25px;
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
-  gap: 10px;
-  border-top: 1px solid #eee;
+  gap: 15px;
+  align-items: center;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.02);
 `;
 
 const Input = styled.input`
   flex: 1;
-  padding: 12px;
-  border: 1px solid #eee;
-  border-radius: 25px;
+  padding: 12px 18px;
+  border: 1px solid ${colors.border};
+  border-radius: 15px;
   outline: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  background: white;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+
+  @media (max-width: ${deviceBreakpoints.mobile}) {
+    padding: 10px 16px;
+    font-size: 16px; // Prevents zoom on iOS
+  }
 
   &:focus {
-    border-color: ${colors.primary};
+    border-color: ${colors.accent};
+    box-shadow: 0 0 0 2px ${colors.accent}33;
+  }
+
+  &::placeholder {
+    color: ${colors.secondary};
   }
 `;
 
 const SendButton = styled.button`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background: ${colors.primary};
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: ${colors.accent};
   border: none;
   color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    transform: scale(1.1);
-    background: ${colors.darkBlue};
+    background: #0077ED;
   }
 `;
 
@@ -394,48 +499,45 @@ const SendIcon = styled.span`
 
 const TypingIndicator = styled.div`
   display: flex;
-  gap: 3px;
-  padding: 12px 16px;
-  background: ${colors.primary};
-  border-radius: 18px;
+  gap: 4px;
+  padding: 10px 16px;
+  background: rgba(240, 240, 240, 0.95);
+  border-radius: 15px;
   width: fit-content;
-  margin-bottom: 10px;
 `;
 
 const TypingDot = styled.div`
-  width: 6px;
-  height: 6px;
-  background: white;
+  width: 5px;
+  height: 5px;
+  background: ${colors.secondary};
   border-radius: 50%;
-  animation: ${bounce} 1s infinite;
+  opacity: 0.7;
+  animation: ${bounce} 1.4s infinite;
   animation-delay: ${props => props.delay}s;
 `;
 
 const ChatbotHint = styled.div`
   position: fixed;
   bottom: 90px;
-  right: 20px;
-  background: rgba(59, 130, 246, 0.1);
-  backdrop-filter: blur(5px);
-  padding: 12px 20px;
-  border-radius: 12px;
-  font-size: 0.9rem;
+  right: 30px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+  backdrop-filter: blur(10px);
+  padding: 16px 24px;
+  border-radius: 16px;
+  font-size: 0.95rem;
   color: ${colors.primary};
-  max-width: 200px;
+  max-width: 250px;
   animation: ${fadeIn} 0.5s ease-out, ${float} 3s ease-in-out infinite;
   z-index: 999;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    right: 25px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid rgba(59, 130, 246, 0.1);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+
+  @media (max-width: ${deviceBreakpoints.mobile}) {
+    bottom: 75px;
+    right: 20px;
+    max-width: 200px;
+    padding: 12px 18px;
+    font-size: 0.9rem;
   }
 `;
 
